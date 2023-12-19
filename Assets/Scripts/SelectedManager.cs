@@ -1,9 +1,14 @@
+using System.Collections.Generic;
 using UnityEngine;
 using static Cube;
 
 public class SelectedManager : MonoBehaviour {
+    [ColorUsage(true, true)]
+    [SerializeField] Color startColor = Color.green; // Utiliza ColorUsageAttribute para mostrar un selector de color en el Inspector
+    [ColorUsage(true, true)]
+    [SerializeField] Color endColor = Color.cyan;
 
-    [SerializeField] int contSelected;
+    [SerializeField] List<Cube> selectedCubes = new List<Cube>();
 
     //SUSCRIPCIÓN al EVENTO
     void OnEnable() {
@@ -16,16 +21,27 @@ public class SelectedManager : MonoBehaviour {
 
 
     private void OnCubeSelected(Cube cube, Vector3 position) {
-        if (!cube.isSelected && contSelected < 2) {
+        int selectedAmount = selectedCubes.Count;
+        if (!cube.isSelected && selectedAmount < 2) {
             // Cambia el color según si es el 1º o 2º cubo
-            cube.setColor(contSelected == 0 ? Color.green : Color.blue);
+            cube.setColor(selectedAmount == 0 ? startColor : endColor);
             cube.isSelected = true; // Marca el cubo como seleccionado
-            contSelected++;
+
+            // Verifica si el cubo ya está en la lista, si no, lo añade
+            if (!selectedCubes.Contains(cube))
+                selectedCubes.Add(cube);
         }
     }
     private void OnCubeDeselected(Cube cube, Vector3 position) {
         cube.setColor(cube.startColor); // Reinicia su color
         cube.isSelected = false;    // Marca el cubo como deseleccionado
-        contSelected--;
+
+        // Verifica si el cubo ya está en la lista, si es así, lo borra
+        if (!selectedCubes.Contains(cube))
+            selectedCubes.Add(cube);
+    }
+
+    public List<Cube> getSelectedCubes() {
+        return selectedCubes;
     }
 }
