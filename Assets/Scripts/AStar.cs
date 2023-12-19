@@ -1,16 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using static MazeGenerator;
+
 public class AStar : MonoBehaviour {
-    public Material pathMaterial, startMaterial, goalMaterial, solutionMaterial;
-    private Vector2Int startNode, goalNode;
+    //public Material pathMaterial, startMaterial, goalMaterial, solutionMaterial;
+    //private Vector2Int startNode, goalNode;
 
-    private int[,] mazeMap;
-    private GameObject[,] mazeObjMap;
-    private bool isDone;
+    [SerializeField] MazeGenerator mazeGenerator;
+    [SerializeField] SelectedManager selectedManager;
+    private int[,] maze2D;
+    //private GameObject[,] mazeObjMap;
+    //private bool isDone;
 
-    private void Start() {
-    }
     private void Update() {
         //HandleInput();
     }
@@ -35,7 +37,7 @@ public class AStar : MonoBehaviour {
                     else if (goalNode == default(Vector2Int)) {
                         goalNode = new Vector2Int(x, y);
 
-                        mazeMap = MazeGenerator.maze;
+                        maze2D = MazeGenerator.maze;
                         mazeObjMap = MazeGenerator.mazeObj;
                         List<Vector2Int> path = AStarSearch(startNode, goalNode);
 
@@ -51,9 +53,23 @@ public class AStar : MonoBehaviour {
         }
     }
     */
+
+    void findPath() {
+        // Crea una instancia de MazeGenerator
+        MazeGenerator mazeGenerator = new MazeGenerator();
+        maze2D = MazeGenerator.getMaze2D();
+
+        SelectedManager.getSelectedCubes();
+
+        List<Vector2Int> path = AStarSearch(startNode, goalNode);
+
+        foreach (Vector2Int node in path)
+            mazeObjMap[node.x, node.y].GetComponent<Renderer>().material = solutionMaterial;
+    }
+
     void ClearPath() {
-        for (int i = 0; i < mazeMap.GetLength(0); i++)
-            for (int j = 0; j < mazeMap.GetLength(1); j++)
+        for (int i = 0; i < maze2D.GetLength(0); i++)
+            for (int j = 0; j < maze2D.GetLength(1); j++)
                 if (mazeObjMap[i, j].CompareTag("Path"))
                     mazeObjMap[i, j].GetComponent<Renderer>().material = pathMaterial;
         isDone = false;
@@ -99,8 +115,8 @@ public class AStar : MonoBehaviour {
         foreach (var offset in possibleNeighbors) {
             Vector2Int neighbor = position + offset;
 
-            if (neighbor.x >= 0 && neighbor.x < mazeMap.GetLength(0) && neighbor.y >= 0 && neighbor.y < mazeMap.GetLength(1) &&
-                mazeMap[neighbor.x, neighbor.y] == 0) {
+            if (neighbor.x >= 0 && neighbor.x < maze2D.GetLength(0) && neighbor.y >= 0 && neighbor.y < maze2D.GetLength(1) &&
+                maze2D[neighbor.x, neighbor.y] == 0) {
                 neighbors.Add(neighbor);
             }
         }

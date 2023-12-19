@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class MazeGenerator : MonoBehaviour {
     public int width = 10; // Ancho del laberinto
@@ -9,7 +8,7 @@ public class MazeGenerator : MonoBehaviour {
     public float detail;
     public int seed;
 
-    private int[,] maze; // Representación del laberinto en un array bidimensional
+    public int[,] maze; // Representación del laberinto en un array bidimensional
     private int[,,] map; // Representación del mapa en un array tridimensional
 
     public GameObject floor;
@@ -112,5 +111,9 @@ public class MazeGenerator : MonoBehaviour {
                 }                    
             }
         }
+    }
+
+    public int[,] getMaze2D() {
+        return maze;
     }
 }
