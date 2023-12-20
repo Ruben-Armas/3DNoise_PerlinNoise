@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 using static MazeGenerator;
@@ -6,6 +7,7 @@ using static MazeGenerator;
 public class AStar : MonoBehaviour {
     //public Material pathMaterial, startMaterial, goalMaterial, solutionMaterial;
     //private Vector2Int startNode, goalNode;
+    public Material solutionMaterial;
 
     [SerializeField] MazeGenerator mazeGenerator;
     [SerializeField] SelectedManager selectedManager;
@@ -55,16 +57,18 @@ public class AStar : MonoBehaviour {
     */
 
     void findPath() {
-        // Crea una instancia de MazeGenerator
-        MazeGenerator mazeGenerator = new MazeGenerator();
-        maze2D = MazeGenerator.getMaze2D();
+        int[,] maze2D = mazeGenerator.getMaze2D();
 
-        SelectedManager.getSelectedCubes();
+        List<Cube> listSelectedCubes = selectedManager.getSelectedCubes();
 
-        List<Vector2Int> path = AStarSearch(startNode, goalNode);
+        Vector2 startCube = listSelectedCubes[0].transform.position;
+        Vector2 endCube = listSelectedCubes[1].transform.position;
+
+        //Calcula el path
+        List<Vector2Int> path = AStarSearch(startCube, endCube);
 
         foreach (Vector2Int node in path)
-            mazeObjMap[node.x, node.y].GetComponent<Renderer>().material = solutionMaterial;
+            maze2D[node.x, node.y].GetComponent<Renderer>().material = solutionMaterial;
     }
 
     void ClearPath() {
@@ -75,7 +79,7 @@ public class AStar : MonoBehaviour {
         isDone = false;
     }
 
-    List<Vector2Int> AStarSearch(Vector2Int start, Vector2Int end) {
+    List<Vector2Int> AStarSearch(Vector2 start, Vector2 end) {
         Queue<Vector2Int> queue = new Queue<Vector2Int>();
         Dictionary<Vector2Int, Vector2Int> cameFrom = new Dictionary<Vector2Int, Vector2Int>();
 
