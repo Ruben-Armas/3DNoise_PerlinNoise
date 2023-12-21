@@ -13,9 +13,11 @@ public class SelectedManager : MonoBehaviour {
     //SUSCRIPCIÓN al EVENTO
     void OnEnable() {
         Cube.onCubeSelected += OnCubeSelected;
+        Cube.onCubeDeselected += OnCubeDeselected;
     }
     //DESUSCRIPCIÓN al EVENTO
     void OnDisable() {
+        Cube.onCubeSelected -= OnCubeSelected;
         Cube.onCubeDeselected -= OnCubeDeselected;
     }
 
@@ -23,6 +25,7 @@ public class SelectedManager : MonoBehaviour {
     private void OnCubeSelected(Cube cube, Vector3 position) {
         int selectedAmount = selectedCubes.Count;
         if (!cube.isSelected && selectedAmount < 2) {
+            Debug.Log("Selectd");
             // Cambia el color según si es el 1º o 2º cubo
             cube.setColor(selectedAmount == 0 ? startColor : endColor);
             cube.isSelected = true; // Marca el cubo como seleccionado
@@ -35,10 +38,11 @@ public class SelectedManager : MonoBehaviour {
     private void OnCubeDeselected(Cube cube, Vector3 position) {
         cube.setColor(cube.startColor); // Reinicia su color
         cube.isSelected = false;    // Marca el cubo como deseleccionado
+        Debug.Log("Deselectd");
 
         // Verifica si el cubo ya está en la lista, si es así, lo borra
-        if (!selectedCubes.Contains(cube))
-            selectedCubes.Add(cube);
+        if (selectedCubes.Contains(cube))
+            selectedCubes.Remove(cube);
     }
 
     public List<Cube> getSelectedCubes() {

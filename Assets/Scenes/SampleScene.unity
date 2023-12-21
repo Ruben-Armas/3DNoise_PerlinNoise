@@ -419,15 +419,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1466073850}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2ff1b95b005e058439e58c35b0088736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pathMaterial: {fileID: 0}
-  startMaterial: {fileID: 0}
-  goalMaterial: {fileID: 0}
-  solutionMaterial: {fileID: 0}
+  solutionMaterial: {fileID: 2100000, guid: d2200d43f0245ac4ea9cffd2070c46e6, type: 2}
+  floorMaterial: {fileID: 2100000, guid: 1a133e893890a7748af93f067e656c3d, type: 2}
+  mazeGenerator: {fileID: 1516338498}
+  selectedManager: {fileID: 1516338499}
 --- !u!1 &1516338495
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,9 +513,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48b0bf64e0ac4b4080369f03dcef099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  contSelected: 0
   startColor: {r: 0, g: 1, b: 0, a: 1}
   endColor: {r: 0, g: 1, b: 1, a: 1}
+  selectedCubes: []
 --- !u!1 &1799005428
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,13 +599,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 1466073855}
+        m_TargetAssemblyTypeName: AStar, Assembly-CSharp
+        m_MethodName: findPath
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

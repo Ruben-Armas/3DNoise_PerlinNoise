@@ -9,7 +9,7 @@ public class MazeGenerator : MonoBehaviour {
     public int seed;
 
     public int[,] maze; // Representación del laberinto en un array bidimensional
-    private int[,,] map; // Representación del mapa en un array tridimensional
+    private GameObject[,,] map; // Representación del mapa en un array tridimensional
 
     public GameObject floor;
     public GameObject wall;
@@ -25,6 +25,8 @@ public class MazeGenerator : MonoBehaviour {
 
     void GenerateMaze() {
         maze = new int[width, large];
+        map = new GameObject[width, height, large]; // Asegúrate de inicializar map aquí
+
         // Inicializar el laberinto
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < large; j++) {
@@ -37,12 +39,13 @@ public class MazeGenerator : MonoBehaviour {
         PerlinNoiseY(maze);
 
         // Puedes imprimir el laberinto en la consola para ver la representación
-        //PrintMaze();
+        //PrintMaze2D();
+        //PrintMaze3D();
     }
 
     void GeneratePath(int x, int y) {
         maze[x, y] = 0; // Marcar la posición actual como parte del camino
-                        // Direcciones posibles (arriba, derecha, abajo, izquierda)
+        // Direcciones posibles (arriba, derecha, abajo, izquierda)
         int[] directions = { 0, 1, 2, 3 };
         Shuffle(directions);
         // Explorar direcciones posibles
@@ -83,21 +86,28 @@ public class MazeGenerator : MonoBehaviour {
                     // Generar cubos desde y = 0 hasta terrainHeight
                     for (int y = 0; y < terrainHeight; y++) {
                         if (y == terrainHeight - 1) {
-                            Instantiate(wall, new Vector3(x, y, z), Quaternion.identity);
+                            // Guarda e instancia el Cubo
+                            GameObject cube = Instantiate(wall, new Vector3(x, y, z), Quaternion.identity);
                             //map[x, y, z] = 1; // 1 representa un muro, 0 representa un camino
+                            map[x, y, z] = cube;
                         }
-                        else
-                            Instantiate(wall_2, new Vector3(x, y, z), Quaternion.identity);
-                        //Debug.Log(x + "," + y + "," + z);
+                        else {
+                            GameObject cube = Instantiate(wall_2, new Vector3(x, y, z), Quaternion.identity);
+                            //Debug.Log(x + "," + y + "," + z);
+                            map[x, y, z] = cube;
+                        }
                     }
-                } else
-                    Instantiate(floor, new Vector3(x, 0, z), Quaternion.identity);
+                }
+                else {
+                    GameObject cube = Instantiate(floor, new Vector3(x, 0, z), Quaternion.identity);
+                    map[x, 0, z] = cube;
+                }
             }
         }
     }
 
     // Se puede modificar para mostrar que lo muestre el map[][][] y no con los Instance del bucle, actualmente muestra el maze 2D
-    void PrintMaze() {
+    void PrintMaze2D() {
         // Método para imprimir el laberinto en la consola
         for (int j = large - 1; j >= 0; j--) {
             for (int i = 0; i < width; i++) {
@@ -108,12 +118,36 @@ public class MazeGenerator : MonoBehaviour {
                 else {
                     Instantiate(floor, new Vector2(i, j), Quaternion.identity);
                     //Debug.Log(" "); // Camino
-                }                    
+                }
             }
         }
     }
+    /*void PrintMaze3D() {
+        for (int x = 0; x < map.GetLength(0); x++) {
+            for (int y = 0; y < map.GetLength(1); y++) {
+                for (int z = 0; z < map.GetLength(2); z++) {
+                    if (map[x, y, z] != null) {
+                        Debug.Log("Instanciando objeto en posición: " + x + ", " + y + ", " + z);
+                        Instantiate(map[x, y, z], new Vector3(x, y, z), Quaternion.identity);
+                    }
+                }
+            }
+        }
+    }*/
 
     public int[,] getMaze2D() {
         return maze;
+    }
+
+    public GameObject[,] getCube3DFloor() {
+        GameObject[,] array2D = new GameObject[map.GetLength(0), map.GetLength(2)];
+
+        for (int x = 0; x < map.GetLength(0); x++) {
+            for (int z = 0; z < map.GetLength(2); z++) {
+                array2D[x, z] = map[Mathf.RoundToInt(x), 0, Mathf.RoundToInt(z)];
+            }
+        }
+
+        return array2D;
     }
 }
