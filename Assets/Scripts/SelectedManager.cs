@@ -25,7 +25,7 @@ public class SelectedManager : MonoBehaviour {
     private void OnCubeSelected(Cube cube, Vector3 position) {
         int selectedAmount = selectedCubes.Count;
         if (!cube.isSelected && selectedAmount < 2) {
-            Debug.Log("Selectd");
+            Debug.Log("Selected");
             // Cambia el color según si es el 1º o 2º cubo
             cube.setColor(selectedAmount == 0 ? startColor : endColor);
             cube.isSelected = true; // Marca el cubo como seleccionado

@@ -108,7 +108,7 @@ public class MazeGenerator : MonoBehaviour {
 
     // Se puede modificar para mostrar que lo muestre el map[][][] y no con los Instance del bucle, actualmente muestra el maze 2D
     void PrintMaze2D() {
-        // Método para imprimir el laberinto en la consola
+        // Método para imprimir el laberinto
         for (int j = large - 1; j >= 0; j--) {
             for (int i = 0; i < width; i++) {
                 if (maze[i, j] == 1) {
@@ -135,11 +135,11 @@ public class MazeGenerator : MonoBehaviour {
         }
     }*/
 
-    public int[,] getMaze2D() {
+    public int[,] GetMaze2D() {
         return maze;
     }
 
-    public GameObject[,] getCube3DFloor() {
+    public GameObject[,] GetCube3DFloor() {
         GameObject[,] array2D = new GameObject[map.GetLength(0), map.GetLength(2)];
 
         for (int x = 0; x < map.GetLength(0); x++) {
