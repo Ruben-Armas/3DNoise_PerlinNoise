@@ -7,7 +7,7 @@ public class Cube : MonoBehaviour {
 
     //EVENTO (DELEGADO)   --> Crear
     public delegate void cubeDeselected(Cube cube, Vector3 position);
-    public static event cubeSelected onCubeDeselected;        //(EVENTO)
+    public static event cubeDeselected onCubeDeselected;        //(EVENTO)
 
 
     private Renderer rend;
